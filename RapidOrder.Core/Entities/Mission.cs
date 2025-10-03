@@ -12,8 +12,15 @@ namespace RapidOrder.Core.Entities
         public DateTime? FinishedAt { get; set; }
         public long? AssignedUserId { get; set; }
         public User? AssignedUser { get; set; }
+
         public int? PlaceId { get; set; }
-        public Place? Place { get; set; } = default!;
+        public Place? Place { get; set; }
+
+        public int? PlaceGroupId { get; set; }
+        public PlaceGroup? PlaceGroup { get; set; }
+
+        public int? SetupId { get; set; }
+        public Setup? Setup { get; set; }
 
         // provenance
         public string? SourceDecoded { get; set; }

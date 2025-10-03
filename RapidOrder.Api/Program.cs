@@ -3,6 +3,7 @@ using RapidOrder.Infrastructure;
 using RapidOrder.Api.Hubs;
 using RapidOrder.Api.Services;
 using Microsoft.OpenApi.Models;
+using RapidOrder.Core.Options;
 using RapidOrder.Core.Services;
 using RapidOrder.Infrastructure.Services;
 
@@ -31,6 +32,8 @@ builder.Services.AddSingleton<LearningModeService>();  // <- needed
 builder.Services.AddSingleton<MissionNotifier>();  // <- SignalR wrapper
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
+builder.Services.AddScoped<IMissionService, MissionService>();
+builder.Services.Configure<MissionServiceOptions>(builder.Configuration.GetSection("MissionService"));
 
 builder.Services.AddHostedService<SignalProcessorService>();
 

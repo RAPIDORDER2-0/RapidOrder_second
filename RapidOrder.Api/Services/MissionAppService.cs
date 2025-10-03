@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RapidOrder.Core.DTOs;
 using RapidOrder.Core.Entities;
 using RapidOrder.Core.Enums;
+using RapidOrder.Core.Services;
 using RapidOrder.Infrastructure;
 
 namespace RapidOrder.Api.Services
@@ -11,12 +12,18 @@ namespace RapidOrder.Api.Services
         private readonly RapidOrderDbContext _db;
         private readonly MissionNotifier _notifier;
         private readonly LearningModeService _learningModeService;
+        private readonly IMissionService _missionService;
 
-        public MissionAppService(RapidOrderDbContext db, MissionNotifier notifier, LearningModeService learningModeService)
+        public MissionAppService(
+            RapidOrderDbContext db,
+            MissionNotifier notifier,
+            LearningModeService learningModeService,
+            IMissionService missionService)
         {
             _db = db;
             _notifier = notifier;
             _learningModeService = learningModeService;
+            _missionService = missionService;
         }
 
         // Called by the file watcher when it decodes a signal
@@ -68,22 +75,26 @@ namespace RapidOrder.Api.Services
                 1 => MissionType.ORDER,
                 2 => MissionType.PAYMENT,
                 3 => MissionType.PAYMENT_EC,
-                4 => MissionType.SERVICE,
+                4 => MissionType.SERVE,
                 _ => MissionType.ASSISTANCE // fallback/default
             };
 
             // 3) Create Mission for the mapped Place
-            var mission = new Mission
-            {
-                PlaceId = callButton.PlaceId,
-                Type = missionType,
-                Status = MissionStatus.STARTED,
-                StartedAt = ts,
-                SourceDecoded = decoded,  // HEX device code
-                SourceButton = button
-            };
+            var result = await _missionService.StartMissionAsync(
+                callButton.PlaceId,
+                missionType,
+                callButton.Place?.UserId,
+                ts,
+                decoded,
+                button,
+                ct);
 
-            _db.Missions.Add(mission);
+            if (!result.CreatedNew)
+            {
+                return result.Mission.Id;
+            }
+
+            var mission = result.Mission;
 
             // 4) EventLog
             _db.EventLogs.Add(new EventLog
@@ -119,47 +130,66 @@ namespace RapidOrder.Api.Services
 
         public async Task<Mission?> UpdateMissionAsync(long id, MissionStatus status, long? userId, CancellationToken ct = default)
         {
-            var m = await _db.Missions.Include(x => x.Place).FirstOrDefaultAsync(x => x.Id == id, ct);
-            if (m == null) return null;
-
             var now = DateTime.UtcNow;
-            m.Status = status;
-            if (userId.HasValue) m.AssignedUserId = userId;
 
-            if (status == MissionStatus.ACKNOWLEDGED && m.AcknowledgedAt == null)
-                m.AcknowledgedAt = now;
-
-            if (status == MissionStatus.FINISHED && m.FinishedAt == null)
+            if (status == MissionStatus.ACKNOWLEDGED)
             {
-                m.FinishedAt = now;
-                if (m.AcknowledgedAt.HasValue)
-                    m.MissionDurationSeconds = (long)(m.FinishedAt.Value - m.AcknowledgedAt.Value).TotalSeconds;
-                if (m.AcknowledgedAt.HasValue)
-                    m.IdleTimeSeconds = (long)(m.AcknowledgedAt.Value - m.StartedAt).TotalSeconds;
+                var mission = await _db.Missions.Include(x => x.Place).FirstOrDefaultAsync(x => x.Id == id, ct);
+                if (mission == null)
+                {
+                    return null;
+                }
+
+                mission.Status = status;
+                mission.AcknowledgedAt ??= now;
+                if (userId.HasValue)
+                {
+                    mission.AssignedUserId = userId;
+                }
+
+                if (mission.AcknowledgedAt.HasValue)
+                {
+                    mission.IdleTimeSeconds = (long)(mission.AcknowledgedAt.Value - mission.StartedAt).TotalSeconds;
+                }
+
+                _db.EventLogs.Add(new EventLog { Type = MapEvent(status), CreatedAt = now, MissionId = mission.Id, PlaceId = mission.PlaceId, UserId = userId });
+                await _db.SaveChangesAsync(ct);
+
+                await PushUpdateAsync(mission);
+                return mission;
             }
 
-            _db.EventLogs.Add(new EventLog { Type = MapEvent(status), CreatedAt = now, MissionId = m.Id, PlaceId = m.PlaceId, UserId = userId });
-            await _db.SaveChangesAsync(ct);
-
-            // push update
-            var placeLabelForUpdate = m.Place != null
-                ? $"{m.Place.Description} (#{m.Place.Number})"
-                : "Unassigned";
-
-            var dto = new MissionCreatedDto
+            if (status == MissionStatus.FINISHED)
             {
-                Id = m.Id,
-                Type = m.Type,
-                Status = m.Status,
-                StartedAt = m.StartedAt,
-                PlaceId = m.PlaceId,
-                PlaceLabel = placeLabelForUpdate,
-                SourceDecoded = m.SourceDecoded,
-                SourceButton = m.SourceButton
-            };
-            await _notifier.PushUpdatedAsync(dto);
+                var mission = await _missionService.FinishMissionAsync(id, userId, now, ct);
+                if (mission == null)
+                {
+                    return null;
+                }
 
-            return m;
+                _db.EventLogs.Add(new EventLog { Type = MapEvent(status), CreatedAt = mission.FinishedAt ?? now, MissionId = mission.Id, PlaceId = mission.PlaceId, UserId = userId });
+                await _db.SaveChangesAsync(ct);
+
+                await PushUpdateAsync(mission);
+                return mission;
+            }
+
+            if (status == MissionStatus.CANCELED)
+            {
+                var mission = await _missionService.CancelMissionAsync(id, now, ct);
+                if (mission == null)
+                {
+                    return null;
+                }
+
+                _db.EventLogs.Add(new EventLog { Type = MapEvent(status), CreatedAt = mission.FinishedAt ?? now, MissionId = mission.Id, PlaceId = mission.PlaceId, UserId = userId });
+                await _db.SaveChangesAsync(ct);
+
+                await PushUpdateAsync(mission);
+                return mission;
+            }
+
+            return await _db.Missions.FirstOrDefaultAsync(x => x.Id == id, ct);
         }
 
         private static EventType MapEvent(MissionStatus s) => s switch
@@ -169,5 +199,26 @@ namespace RapidOrder.Api.Services
             MissionStatus.CANCELED => EventType.MissionCanceled,
             _ => EventType.MissionCreated
         };
+
+        private async Task PushUpdateAsync(Mission mission)
+        {
+            var placeLabelForUpdate = mission.Place != null
+                ? $"{mission.Place.Description} (#{mission.Place.Number})"
+                : "Unassigned";
+
+            var dto = new MissionCreatedDto
+            {
+                Id = mission.Id,
+                Type = mission.Type,
+                Status = mission.Status,
+                StartedAt = mission.StartedAt,
+                PlaceId = mission.PlaceId,
+                PlaceLabel = placeLabelForUpdate,
+                SourceDecoded = mission.SourceDecoded,
+                SourceButton = mission.SourceButton
+            };
+
+            await _notifier.PushUpdatedAsync(dto);
+        }
     }
 }
