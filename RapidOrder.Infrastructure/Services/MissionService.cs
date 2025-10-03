@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using RapidOrder.Core.Entities;
 using RapidOrder.Core.Enums;
-using RapidOrder.Core.Options;
 using RapidOrder.Core.Services;
 
 #pragma warning disable CS8602
@@ -14,16 +12,16 @@ public class MissionService : IMissionService
 {
     private readonly RapidOrderDbContext _dbContext;
     private readonly ILogger<MissionService> _logger;
-    private readonly MissionServiceOptions _options;
+    private readonly ISettingsService _settingsService;
 
     public MissionService(
         RapidOrderDbContext dbContext,
         ILogger<MissionService> logger,
-        IOptions<MissionServiceOptions> options)
+        ISettingsService settingsService)
     {
         _dbContext = dbContext;
         _logger = logger;
-        _options = options.Value;
+        _settingsService = settingsService;
     }
 
     public async Task<MissionStartResult> StartMissionAsync(
@@ -344,7 +342,9 @@ public class MissionService : IMissionService
 
     private async Task HandleServeTrackingAsync(Mission mission, DateTime finishedAtUtc, CancellationToken cancellationToken)
     {
-        if (!_options.TrackServeMission)
+        var trackServe = await _settingsService.GetTrackServedMissionAsync(cancellationToken);
+
+        if (!trackServe)
         {
             return;
         }

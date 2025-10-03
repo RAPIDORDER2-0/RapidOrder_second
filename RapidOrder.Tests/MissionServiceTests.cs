@@ -2,10 +2,8 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using RapidOrder.Core.Entities;
 using RapidOrder.Core.Enums;
-using RapidOrder.Core.Options;
 using RapidOrder.Infrastructure;
 using RapidOrder.Infrastructure.Services;
 using RapidOrder.Core.Services;
@@ -15,7 +13,21 @@ namespace RapidOrder.Tests.Services;
 
 public class MissionServiceTests
 {
-    private static (MissionService Service, RapidOrderDbContext Context) CreateService(MissionServiceOptions? options = null)
+    private sealed class FakeSettingsService : ISettingsService
+    {
+        public bool TrackServedMission { get; set; }
+
+        public Task<bool> GetTrackServedMissionAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(TrackServedMission);
+
+        public Task SetTrackServedMissionAsync(bool value, CancellationToken cancellationToken = default)
+        {
+            TrackServedMission = value;
+            return Task.CompletedTask;
+        }
+    }
+
+    private static (MissionService Service, RapidOrderDbContext Context, FakeSettingsService Settings) CreateService(bool trackServed = false)
     {
         var dbOptions = new DbContextOptionsBuilder<RapidOrderDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -23,9 +35,9 @@ public class MissionServiceTests
 
         var context = new RapidOrderDbContext(dbOptions);
         var logger = NullLogger<MissionService>.Instance;
-        var opts = Options.Create(options ?? new MissionServiceOptions());
-        var service = new MissionService(context, logger, opts);
-        return (service, context);
+        var settings = new FakeSettingsService { TrackServedMission = trackServed };
+        var service = new MissionService(context, logger, settings);
+        return (service, context, settings);
     }
 
     private static Place SeedPlace(RapidOrderDbContext context)
@@ -65,7 +77,7 @@ public class MissionServiceTests
     [Fact]
     public async Task StartMission_CreatesMissionWithPlaceAndUser()
     {
-        var (service, context) = CreateService();
+        var (service, context, _) = CreateService();
         await using var _ = context;
         var place = SeedPlace(context);
 
@@ -83,7 +95,7 @@ public class MissionServiceTests
     [Fact]
     public async Task StartMission_PreventsDuplicateForSameUser()
     {
-        var (service, context) = CreateService();
+        var (service, context, _) = CreateService();
         await using var _ = context;
         var place = SeedPlace(context);
 
@@ -98,7 +110,7 @@ public class MissionServiceTests
     [Fact]
     public async Task StartMission_ComputesIdleTimeForPayment()
     {
-        var (service, context) = CreateService();
+        var (service, context, _) = CreateService();
         await using var _ = context;
         var place = SeedPlace(context);
 
@@ -123,7 +135,8 @@ public class MissionServiceTests
     [Fact]
     public async Task FinishMission_SetsDurationAndStartsServeWhenConfigured()
     {
-        var (service, context) = CreateService(new MissionServiceOptions { TrackServeMission = true });
+        var (service, context, settings) = CreateService();
+        settings.TrackServedMission = true;
         await using var _ = context;
         var place = SeedPlace(context);
 
@@ -149,7 +162,7 @@ public class MissionServiceTests
     [Fact]
     public async Task CancelPlaceMissions_MarksAllCancelled()
     {
-        var (service, context) = CreateService();
+        var (service, context, _) = CreateService();
         await using var _ = context;
         var place = SeedPlace(context);
 
@@ -162,5 +175,27 @@ public class MissionServiceTests
 
         var statuses = await context.Missions.Where(m => m.PlaceId == place.Id).Select(m => m.Status).ToListAsync();
         Assert.All(statuses, status => Assert.Equal(MissionStatus.CANCELED, status));
+    }
+
+    [Fact]
+    public async Task FinishMission_DoesNotStartServe_WhenDisabled()
+    {
+        var (service, context, settings) = CreateService();
+        settings.TrackServedMission = false;
+        await using var _ = context;
+        var place = SeedPlace(context);
+
+        var startedAt = DateTime.UtcNow.AddMinutes(-5);
+        var result = await service.StartMissionAsync(place.Id, MissionType.ORDER, place.UserId, startedAt);
+
+        var finished = await service.FinishMissionAsync(result.Mission.Id, place.UserId, DateTime.UtcNow);
+
+        Assert.NotNull(finished);
+
+        var serveMission = await context.Missions
+            .Where(m => m.Type == MissionType.SERVE && m.PlaceId == place.Id)
+            .FirstOrDefaultAsync();
+
+        Assert.Null(serveMission);
     }
 }
