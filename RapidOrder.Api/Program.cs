@@ -3,8 +3,8 @@ using RapidOrder.Infrastructure;
 using RapidOrder.Api.Hubs;
 using RapidOrder.Api.Services;
 using Microsoft.OpenApi.Models;
-using RapidOrder.Core.Entities;
-using RapidOrder.Core.Enums;
+using RapidOrder.Core.Services;
+using RapidOrder.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +29,8 @@ builder.Services.AddDbContext<RapidOrderDbContext>(opt =>
 builder.Services.AddScoped<MissionAppService>(); 
 builder.Services.AddSingleton<LearningModeService>();  // <- needed
 builder.Services.AddSingleton<MissionNotifier>();  // <- SignalR wrapper
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPlaceService, PlaceService>();
 
 builder.Services.AddHostedService<SignalProcessorService>();
 

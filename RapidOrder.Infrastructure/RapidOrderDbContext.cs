@@ -10,6 +10,7 @@ namespace RapidOrder.Infrastructure
         }
         public DbSet<PlaceGroup> PlaceGroups => Set<PlaceGroup>();
         public DbSet<Place> Places => Set<Place>();
+        public DbSet<Setup> Setups => Set<Setup>();
         public DbSet<CallButton> CallButtons => Set<CallButton>();
         public DbSet<Mission> Missions => Set<Mission>();
         public DbSet<User> Users => Set<User>();

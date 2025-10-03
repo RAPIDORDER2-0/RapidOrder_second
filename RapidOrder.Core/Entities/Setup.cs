@@ -3,22 +3,18 @@ using System.Text.Json.Serialization;
 
 namespace RapidOrder.Core.Entities
 {
-    public class PlaceGroup : AbstractAuditingEntity
+    public class Setup : AbstractAuditingEntity
     {
         public int Id { get; set; }
 
-        [StringLength(50)]
-        public string? Description { get; set; }
-
-        public int? Number { get; set; }
-
         [StringLength(100)]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
-        public int? SetupId { get; set; }
+        [StringLength(50)]
+        public string? Icon { get; set; }
 
         [JsonIgnore]
-        public Setup? Setup { get; set; }
+        public ICollection<PlaceGroup> PlaceGroups { get; set; } = new List<PlaceGroup>();
 
         [JsonIgnore]
         public ICollection<Place> Places { get; set; } = new List<Place>();
