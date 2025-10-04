@@ -24,8 +24,21 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // ✅ EF Core
+var useInMemoryDatabase = builder.Environment.IsEnvironment("Testing")
+    || builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
+
 builder.Services.AddDbContext<RapidOrderDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=rapidorder.db"));
+{
+    if (useInMemoryDatabase)
+    {
+        var dbName = builder.Configuration.GetValue<string>("InMemoryDatabaseName") ?? "RapidOrderTestDb";
+        opt.UseInMemoryDatabase(dbName);
+    }
+    else
+    {
+        opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=rapidorder.db");
+    }
+});
 
 builder.Services.AddScoped<MissionAppService>(); 
 builder.Services.AddSingleton<LearningModeService>();  // <- needed
@@ -76,3 +89,5 @@ app.MapControllers();
 app.MapHub<MissionHub>("/hubs/missions");
 
 app.Run();
+
+public partial class Program { }
