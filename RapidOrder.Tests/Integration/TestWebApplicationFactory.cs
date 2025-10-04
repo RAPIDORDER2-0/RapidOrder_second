@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ using RapidOrder.Core.Entities;
 using RapidOrder.Core.Enums;
 using RapidOrder.Core.Services;
 using RapidOrder.Infrastructure;
+using RapidOrder.Tests.Integration.Authentication;
 
 namespace RapidOrder.Tests.Integration;
 
@@ -30,6 +32,12 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = TestAuthHandler.AuthenticationScheme;
+                options.DefaultChallengeScheme = TestAuthHandler.AuthenticationScheme;
+            }).AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.AuthenticationScheme, _ => { });
+
             services.RemoveAll(typeof(ISettingsService));
             services.RemoveAll(typeof(IMissionService));
             services.RemoveAll(typeof(IHostedService));

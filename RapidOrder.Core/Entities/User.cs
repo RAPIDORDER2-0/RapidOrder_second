@@ -62,6 +62,10 @@ namespace RapidOrder.Core.Entities
         [StringLength(100)]
         public string? Schedule { get; set; }
 
+        public bool IsOnBreak { get; set; }
+
+        public DateTime? BreakStartedAt { get; set; }
+
         [JsonIgnore]
         public ICollection<Authority> Authorities { get; set; } = new HashSet<Authority>();
 

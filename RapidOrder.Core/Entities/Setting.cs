@@ -11,5 +11,4 @@ public class Setting : AbstractAuditingEntity
 
     [StringLength(100)]
     public string? Value { get; set; }
-        = string.Empty;
 }

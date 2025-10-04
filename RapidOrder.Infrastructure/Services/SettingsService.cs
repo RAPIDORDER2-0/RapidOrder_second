@@ -1,23 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RapidOrder.Core.Constants;
 using RapidOrder.Core.Entities;
 using RapidOrder.Core.Options;
 using RapidOrder.Core.Services;
 
 namespace RapidOrder.Infrastructure.Services;
 
-public class SettingService : ISettingsService
+public class SettingsService : ISettingsService
 {
-    private const string TrackServedMissionKey = "trackServedMission";
-
     private readonly RapidOrderDbContext _dbContext;
-    private readonly ILogger<SettingService> _logger;
+    private readonly ILogger<SettingsService> _logger;
     private readonly MissionServiceOptions _defaults;
 
-    public SettingService(
+    public SettingsService(
         RapidOrderDbContext dbContext,
-        ILogger<SettingService> logger,
+        ILogger<SettingsService> logger,
         IOptions<MissionServiceOptions> defaults)
     {
         _dbContext = dbContext;
@@ -29,7 +28,7 @@ public class SettingService : ISettingsService
     {
         var setting = await _dbContext.Settings
             .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.Name == TrackServedMissionKey, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Name == SettingKeys.TrackServedMission, cancellationToken);
 
         if (setting?.Value is null)
         {
@@ -42,13 +41,13 @@ public class SettingService : ISettingsService
     public async Task SetTrackServedMissionAsync(bool value, CancellationToken cancellationToken = default)
     {
         var setting = await _dbContext.Settings
-            .FirstOrDefaultAsync(s => s.Name == TrackServedMissionKey, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Name == SettingKeys.TrackServedMission, cancellationToken);
 
         if (setting == null)
         {
             setting = new Setting
             {
-                Name = TrackServedMissionKey,
+                Name = SettingKeys.TrackServedMission,
                 Value = value ? "1" : "0"
             };
 
@@ -59,7 +58,7 @@ public class SettingService : ISettingsService
             setting.Value = value ? "1" : "0";
         }
 
-        _logger.LogInformation("Setting {Setting} updated to {Value}", TrackServedMissionKey, setting.Value);
+        _logger.LogInformation("Setting {Setting} updated to {Value}", SettingKeys.TrackServedMission, setting.Value);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

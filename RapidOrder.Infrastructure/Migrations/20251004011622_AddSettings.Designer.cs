@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RapidOrder.Infrastructure;
 
@@ -10,9 +11,11 @@ using RapidOrder.Infrastructure;
 namespace RapidOrder.Infrastructure.Migrations
 {
     [DbContext(typeof(RapidOrderDbContext))]
-    partial class RapidOrderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251004011622_AddSettings")]
+    partial class AddSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -245,9 +248,6 @@ namespace RapidOrder.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("AssignedUserId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -279,8 +279,6 @@ namespace RapidOrder.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssignedUserId");
 
                     b.HasIndex("SetupId");
 
@@ -369,9 +367,6 @@ namespace RapidOrder.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("BreakStartedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -395,9 +390,6 @@ namespace RapidOrder.Infrastructure.Migrations
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsOnBreak")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LangKey")
                         .HasMaxLength(10)
@@ -560,15 +552,9 @@ namespace RapidOrder.Infrastructure.Migrations
 
             modelBuilder.Entity("RapidOrder.Core.Entities.PlaceGroup", b =>
                 {
-                    b.HasOne("RapidOrder.Core.Entities.User", "AssignedUser")
-                        .WithMany()
-                        .HasForeignKey("AssignedUserId");
-
                     b.HasOne("RapidOrder.Core.Entities.Setup", "Setup")
                         .WithMany("PlaceGroups")
                         .HasForeignKey("SetupId");
-
-                    b.Navigation("AssignedUser");
 
                     b.Navigation("Setup");
                 });

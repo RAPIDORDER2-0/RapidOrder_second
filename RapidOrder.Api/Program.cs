@@ -1,4 +1,8 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RapidOrder.Infrastructure;
 using RapidOrder.Api.Hubs;
 using RapidOrder.Api.Services;
@@ -6,11 +10,14 @@ using Microsoft.OpenApi.Models;
 using RapidOrder.Core.Options;
 using RapidOrder.Core.Services;
 using RapidOrder.Infrastructure.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -46,7 +53,32 @@ builder.Services.AddSingleton<MissionNotifier>();  // <- SignalR wrapper
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<IMissionService, MissionService>();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IPlaceAssignmentService, PlaceAssignmentService>();
+builder.Services.AddScoped<IWatchService, WatchService>();
+builder.Services.AddScoped<IMissionService, MissionService>();
 builder.Services.Configure<MissionServiceOptions>(builder.Configuration.GetSection("MissionService"));
+
+var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key") ?? "RapidOrderDevelopmentKey_ChangeMe";
+var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddHostedService<SignalProcessorService>();
 
@@ -84,6 +116,9 @@ var db = scope.ServiceProvider.GetRequiredService<RapidOrderDbContext>();
 
 
 app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<MissionHub>("/hubs/missions");
