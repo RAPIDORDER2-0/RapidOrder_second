@@ -52,3 +52,21 @@ C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Infrastructure\ob
 C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.pdb
 C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.genruntimeconfig.cache
 C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Infrastructure\obj\Debug\net9.0\ref\RapidOrder.Infrastructure.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\bin\Debug\net9.0\RapidOrder.Infrastructure.deps.json
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\bin\Debug\net9.0\RapidOrder.Infrastructure.runtimeconfig.json
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\bin\Debug\net9.0\RapidOrder.Infrastructure.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\bin\Debug\net9.0\RapidOrder.Infrastructure.pdb
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\bin\Debug\net9.0\RapidOrder.Core.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\bin\Debug\net9.0\RapidOrder.Core.pdb
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.AssemblyInfo.cs
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.sourcelink.json
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrd.0A75B2E5.Up2Date
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\refint\RapidOrder.Infrastructure.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.pdb
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\RapidOrder.Infrastructure.genruntimeconfig.cache
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Infrastructure\obj\Debug\net9.0\ref\RapidOrder.Infrastructure.dll

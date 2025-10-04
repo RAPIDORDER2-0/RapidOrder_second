@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.api\\RapidOrder.Api.csproj": {}
+    "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Api\\RapidOrder.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.api\\RapidOrder.Api.csproj": {
+    "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Api\\RapidOrder.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.api\\RapidOrder.Api.csproj",
+        "projectUniqueName": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Api\\RapidOrder.Api.csproj",
         "projectName": "RapidOrder.Api",
-        "projectPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.api\\RapidOrder.Api.csproj",
-        "packagesPath": "C:\\Users\\Nigrumtech GbR\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.api\\obj\\",
+        "projectPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Api\\RapidOrder.Api.csproj",
+        "packagesPath": "C:\\Users\\AndreasRamos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nigrumtech GbR\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\AndreasRamos\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -26,11 +26,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj": {
-                "projectPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj"
+              "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj": {
+                "projectPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj"
               },
-              "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj"
+              "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj"
               }
             }
           }
@@ -51,6 +51,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.8, )"
@@ -66,6 +74,10 @@
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
               "version": "[9.0.8, )"
             },
@@ -101,17 +113,17 @@
         }
       }
     },
-    "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj": {
+    "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj",
+        "projectUniqueName": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj",
         "projectName": "RapidOrder.Core",
-        "projectPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj",
-        "packagesPath": "C:\\Users\\Nigrumtech GbR\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\obj\\",
+        "projectPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj",
+        "packagesPath": "C:\\Users\\AndreasRamos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nigrumtech GbR\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\AndreasRamos\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -160,17 +172,17 @@
         }
       }
     },
-    "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj": {
+    "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj",
         "projectName": "RapidOrder.Infrastructure",
-        "projectPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\Nigrumtech GbR\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Infrastructure\\RapidOrder.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\AndreasRamos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nigrumtech GbR\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\AndreasRamos\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -182,8 +194,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj": {
-                "projectPath": "C:\\Users\\Nigrumtech GbR\\Documents\\RapidOrder_second\\RapidOrder.Core\\RapidOrder.Core.csproj"
+              "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj": {
+                "projectPath": "C:\\Users\\AndreasRamos\\Projects\\RAPIDORDER\\RapidOrder.Core\\RapidOrder.Core.csproj"
               }
             }
           }

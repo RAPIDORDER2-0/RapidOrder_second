@@ -34,3 +34,15 @@ C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Core\obj\Debug\ne
 C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Core\obj\Debug\net9.0\refint\RapidOrder.Core.dll
 C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.pdb
 C:\Users\Nigrumtech GbR\Documents\RapidOrder_second\RapidOrder.Core\obj\Debug\net9.0\ref\RapidOrder.Core.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\bin\Debug\net9.0\RapidOrder.Core.deps.json
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\bin\Debug\net9.0\RapidOrder.Core.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\bin\Debug\net9.0\RapidOrder.Core.pdb
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.AssemblyInfoInputs.cache
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.AssemblyInfo.cs
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.csproj.CoreCompileInputs.cache
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.sourcelink.json
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\refint\RapidOrder.Core.dll
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\RapidOrder.Core.pdb
+C:\Users\AndreasRamos\Projects\RAPIDORDER\RapidOrder.Core\obj\Debug\net9.0\ref\RapidOrder.Core.dll
